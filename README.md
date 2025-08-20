@@ -75,29 +75,6 @@ text
 
 ---
 
-## Project Structure
-
-/
-├── email_bot.py # Core CLI program with all bot functionality
-├── requirements.txt # Python dependencies
-├── credentials.json # OAuth2 credentials (user-provided, ignored by Git)
-├── token.json # OAuth2 token cache (auto-generated, ignored by Git)
-├── chroma_db/ # Vector embeddings storage (auto-generated)
-├── summaries/ # Cached email summaries (auto-generated)
-└── .gitignore # Ignores sensitive and cache files
-
-text
-
----
-
-## Security & Privacy
-
-- OAuth2 credentials and tokens **must never be committed** to source control  
-- All AI inference runs **locally** on your machine through Olama’s LLaMA2 model, guaranteeing data privacy  
-- Your vector embeddings and cached summaries are stored only on your machine
-
----
-
 ## Troubleshooting
 
 - **Authentication issues:** Delete `token.json` to reset Gmail authorization  
@@ -106,18 +83,4 @@ text
 
 ---
 
-## Contribution & License
 
-This project is open source under the MIT License. Contributions, improvements, and bug reports are welcome via GitHub.
-
----
-
-## Acknowledgments
-
-- Gmail API powered by Google  
-- Olama LLaMA2 for local LLM inference  
-- ChromaDB for vector similarity search
-
----
-
-Thank you for using this project! Your privacy-first AI assistant for Gmail awaits.

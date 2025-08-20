@@ -1,119 +1,123 @@
 # Gmail CLI AI ChatBot
 
-A terminal-based AI-powered Gmail assistant that securely fetches unread emails via Gmail API, summarizes them using a local LLaMA2 model through Olama API with streaming JSON handling, stores email texts and summaries as embeddings in ChromaDB for semantic search, and provides an interactive command-line chat interface that answers natural language questions by retrieving relevant emails via semantic search and generating dynamic responses using the LLaMA2 model.
+A powerful, terminal-based AI assistant that securely accesses your Gmail inbox, summarizes unread emails using a local LLaMA2 model via Olama API, and enables interactive, natural language querying of your email content through semantic search powered by ChromaDB and dynamic LLM-generated responses.
 
 ---
 
-## Requirements
+## Features
 
-- **Python 3.11+**  
-- **Olama CLI** with LLaMA2 model running locally (`olama run llama2`)  
-- **Gmail OAuth2 credentials JSON** file (`credentials.json`)
+- **Secure OAuth2 authentication** with Gmail API  
+- **Fetch and summarize** top unread emails in concise bullet points  
+- **Store email content and summaries** as embeddings in ChromaDB for efficient semantic retrieval  
+- **Intelligent chat interface** for asking detailed questions about your emails  
+- **Fully local deployment**, ensuring privacy and control—no cloud AI services required
 
 ---
 
-## Setup and Run
+## Prerequisites
 
-1. Clone the repository and enter folder
+- Python 3.11 or later  
+- [Olama CLI](https://olama.ai/) installed with LLaMA2 model  
+- Active Google Cloud project with Gmail API enabled and OAuth2 credentials (`credentials.json`)  
+
+---
+
+## Installation
+
+1. **Clone the repository**
 
 git clone <your-repo-url>
 cd <repo-folder>
-2. Install Python dependencies
+
+text
+
+2. **Create and activate a virtual environment (recommended)**
+
+python3 -m venv venv
+source venv/bin/activate
+
+text
+
+3. **Install dependencies**
 
 pip install -r requirements.txt
-3. Place your Gmail OAuth2 credentials JSON as credentials.json in the project root
-4. Pull and run Olama LLaMA2 locally
+
+text
+
+4. **Add Gmail OAuth2 credentials**
+
+- Follow Google's guide to create OAuth 2.0 credentials for a desktop application in your Google Cloud Console  
+- Download the `credentials.json` file  
+- Place it in the project root directory  
+- *Important:* Never commit or share this file publicly  
+
+5. **Download and run Olama LLaMA2 model locally**
 
 olama pull llama2
 olama run llama2
-5. Run the chatbot CLI
+
+text
+
+---
+
+## Usage
+
+Run the bot with:
 
 PYTHONPATH=$(pwd) python email_bot.py
 
 text
 
----
-
-## How It Works
-
-1. **Fetch & Summarize Emails**
-
-emails = fetch_unread_emails(n)
-for email in emails:
-summary = summarize_email(email["body"])
-add_to_vector_store(email["id"], email["body"], summary)
-print(f"Email: {email['subject']}\nSummary: {summary}\n")
-
-text
-
-2. **General Summary**
-
-general_summary = summarize_all(all_summaries)
-print(f"General Summary:\n{general_summary}")
-
-text
-
-3. **Interactive AI Chat**
-
-def ai_chat_loop():
-while True:
-query = input("You: ").strip()
-if query.lower() in ["exit", "quit"]:
-break
-
-text
-    results = semantic_search(query, k=5)
-    docs = results.get("documents", [[]])
-
-    if not docs:
-        print("No relevant emails found.")
-        continue
-
-    context = "\n\n---\n\n".join(docs)
-    prompt = f"Using the emails below, answer:\n{context}\n\nQuestion: {query}\nAnswer:"
-
-    answer = olama_streaming_completion(prompt)
-    print(f"\n🤖 {answer}\n")
-
-text
+- Enter the number of unread emails you want to summarize  
+- Review the individual email summaries and the general summary provided  
+- Enter the interactive chat mode that lets you ask natural language questions about your emails  
+- Type `exit` or `quit` to close the chat session
 
 ---
 
 ## Project Structure
 
-.
-├── email_bot.py # Main script (all functionality)
-├── requirements.txt # Python packages
-├── credentials.json # Gmail OAuth2 (user adds this)
-├── token.json # OAuth token (auto-generated)
-├── chroma_db/ # Vector database storage folder
-├── summaries/ # Cached email summaries
-├── .gitignore # Security exclusions (ignore credentials, tokens, etc.)
+/
+├── email_bot.py # Core CLI program with all bot functionality
+├── requirements.txt # Python dependencies
+├── credentials.json # OAuth2 credentials (user-provided, ignored by Git)
+├── token.json # OAuth2 token cache (auto-generated, ignored by Git)
+├── chroma_db/ # Vector embeddings storage (auto-generated)
+├── summaries/ # Cached email summaries (auto-generated)
+└── .gitignore # Ignores sensitive and cache files
 
 text
 
 ---
 
-## Security Best Practices
+## Security & Privacy
 
-- **Never push your `credentials.json` or `token.json` to public repos**  
-- `.gitignore` ensures sensitive files are excluded  
-- Users must create and add their own OAuth credentials securely  
+- OAuth2 credentials and tokens **must never be committed** to source control  
+- All AI inference runs **locally** on your machine through Olama’s LLaMA2 model, guaranteeing data privacy  
+- Your vector embeddings and cached summaries are stored only on your machine
 
 ---
 
 ## Troubleshooting
 
-- Delete `token.json` to reset Gmail authentication  
-- Confirm Olama LLaMA2 server is running and accessible at `http://localhost:11434/api/generate`  
-- Verify directory permissions for `chroma_db` and `summaries`
+- **Authentication issues:** Delete `token.json` to reset Gmail authorization  
+- **No responses or failures:** Verify that your Olama LLaMA2 server is running and accessible at [http://localhost:11434/api/generate](http://localhost:11434/api/generate)  
+- **File permission errors:** Ensure the project folders (`chroma_db/` and `summaries/`) have proper read/write permissions
 
 ---
 
-## License & Contribution
+## Contribution & License
 
-This project is open source under the MIT License. Contributions, feedback, and issues are welcome on GitHub.
+This project is open source under the MIT License. Contributions, improvements, and bug reports are welcome via GitHub.
 
 ---
 
-Made with ❤️ using Google Gmail API, Olama local LLaMA2, and ChromaDB.
+## Acknowledgments
+
+- Gmail API powered by Google  
+- Olama LLaMA2 for local LLM inference  
+- ChromaDB for vector similarity search
+
+---
+
+Thank you for using this project! Your privacy-first AI assistant for Gmail awaits.
